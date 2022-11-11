@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tampen brenner</title>
+
+    <style>
+
+        body{
+            margin:0;
+            padding:0;
+        }
+
+        #page{
+            height: 100vh;
+            width: 100vw;
+            background-color: aquamarine;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+        #red-square{
+            width: 50px;
+            height: 50px;
+        }
+        #point{
+            display: none;
+            width: 5px;
+            height: 5px;
+            background-color: orange;
+
+        }
+
+    </style>
+</head>
+<body>
+
+    <div onmousemove="mouseMove(event)" id="page">
+        <div id="red-square"></div>
+        <div id="point"></div>
+    </div>
+
+    
+
+
+
+    <script>
+
+        const pointDiv = document.getElementById('point');
+
+        //makeSquareRed(0.5);
+
+        //kan lages til egen funksjon: setRandomPoint
+        const pointX = getRandomNumber(0, getWidth());
+        const pointY = getRandomNumber(0, getHeight());
+
+        console.log("pointX: " + pointX +"pointY:"+ pointY);
+
+       
+        
+
+
+
+        function drawPointDiv(){
+            
+            pointDiv.style.position = 'absolute';
+            pointDiv.style.top = `${pointY}px`; 
+            pointDiv.style.left =  `${pointX}px`;
+        }
+
+    
+
+        
+
+        function getRandomNumber(min, max){
+            return min + Math.floor(Math.random() * (max - min + 1));
+        }
+
+        function makeSquareRed(distanceFracion){
+
+            let invertedAmoutOfRed = parseInt(distanceFracion * 255);
+            //console.log(invertedAmoutOfRed);
+            document.getElementById('red-square').style.backgroundColor = `rgb(${255 - invertedAmoutOfRed}, 0, 0)`;
+
+        }
+        function mouseMove(e){
+            let x = e.clientX;
+            let y = e.clientY;
+
+            console.log("Points: x: "+ x +" y: " + y);
+
+            let distance = getDistanceFromXY(x, y);
+            //calculates distance fraction based on how far away its possible to be from the point
+            let df = distance / (Math.sqrt(Math.pow(getWidth(), 2) + Math.pow(getHeight(), 2)));
+            console.log("Distance: " + distance);
+            console.log("Df: " + df);
+
+            makeSquareRed(df);
+
+            if(distance < 5){
+                youWin();
+            }
+
+        }
+
+        function youWin(){
+            //add code for a fire symbol or something
+
+            drawPointDiv();
+
+            pointDiv.style.display = 'block';
+            pointDiv.style.width = '20px';
+            pointDiv.style.height = '20px';
+        }
+
+        function getDistanceFromXY(x, y){
+            //uses Pythagoras to calculate distance from mouse to point
+            let distance = Math.sqrt(Math.pow((x-pointX), 2) + Math.pow((y-pointY), 2));
+            return parseInt(distance);
+        }
+        function getHeight(){
+            return parseInt(window.innerHeight);
+        }
+        function getWidth(){
+            return parseInt(window.innerWidth);
+        }
+
+
+    </script>
+    
+</body>
+</html>
